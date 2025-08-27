@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js" defer></script>
+  <script src="./script/script.js" defer></script>
+</head>
+
+<body id="app" v-cloak>
+  <header>
+    <a href="Settings.html" id="profile-section" v-if="signedInUser" style="position: absolute; top: 10px; left: 10px;" class="auth-only">
+      <img :src="profilePic || defaultPic" alt="Profile Picture" width="50" height="50" style="border-radius: 50%;" />
+    </a>
+    <label class="switch">
+      <input type="checkbox" v-model="dark_mode">
+      <span class="slider round"></span>
+    </label>
+    <h1>MuseSphere</h1>
+    <p>Your global community for art lovers</p>
+    <nav id="navbar">
+      <a href="Home.html" class="guestandAuth">Home</a>
+      <a href="Explore.html" class="auth-only">Explore</a>
+      <a href="Profile.html" class="auth-only">Collection</a>
+      <a href="Settings.html" class="auth-only">Settings</a>
+      <a href="SignUp.html" class="guest-only">Sign Up</a>
+      <a href="login.html" class="guest-only">Login</a>
+      <a href="AdminDashboard.html" class="auth-only" v-if="isAdmin">Admin Dashboard</a>
+      <a href="#" @click.prevent="logout" v-if="signedInUser" class="auth-only">Logout</a>
+    </nav>
+
+  </header>
+
+  <section id="about" class="landingPage">
+    <div class="overlay"></div>
+    <div class="landingPageContent">
+    <h1>About MuseSphere</h1>
+    <p>
+      MuseSphere blends the essence of artistic inspiration (“Muse”) with the boundless connection of a global community (“Sphere”).
+      Whether you're a curious beginner or a seasoned art enthusiast, MuseSphere invites you to discover, admire, and engage with an
+      expansive collection of artworks — from ancient Asian masterpieces to cutting-edge European expressions. Dive into a world where
+      creativity knows no borders.
+    </p>
+    <br>
+    <h2>Join us today!</h2>
+    <a href="SignUp.html" class="button">Sign up</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 MuseSphere. All rights reserved.</p>
+  </footer>
+</body>
+</html>

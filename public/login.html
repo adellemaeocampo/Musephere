@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MuseSphere Login</title>
+  <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js" defer></script>
+  <script src="./script/script.js" defer></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <div id="app" v-cloak>
+  <header>
+    <label class="switch">
+      <input type="checkbox" v-model="dark_mode">
+      <span class="slider round"></span>
+    </label>
+    <h1>MuseSphere</h1>
+    <p>Your global community for art lovers</p>
+    <nav id="navbar">
+      <a href="Home.html" class="guestandAuth">Home</a>
+      <a href="Explore.html" class="auth-only">Explore</a>
+      <a href="Profile.html" class="auth-only">Collection</a>
+      <a href="Settings.html" class="auth-only">Settings</a>
+      <a href="SignUp.html" class="guest-only">Sign Up</a>
+      <a href="login.html" class="guest-only">Login</a>
+      <a href="AdminDashboard.html" class="auth-only" v-if="isAdmin">Admin Dashboard</a>
+      <a href="#" @click.prevent="logout" v-if="signedInUser" class="auth-only">Logout</a>
+    </nav>
+
+  </header>
+</div>
+
+  <section id="loginApp">
+    <h2>Login</h2>
+
+    <p v-if="error" class="error-msg" v-cloak> {{ error }} </p>
+    <p v-if="success" class="success" v-cloak> {{ success }} </p>
+    <form @submit.prevent="handleLogin">
+      <label>Username / Email: </label>
+      <input type="text" name="username / email" placeholder="Username / email" v-model.trim="username" required>
+
+      <label>Password: </label>
+      <input type="password" name="password" placeholder="Password" v-model.trim="password" required>
+
+      <button type="submit" :disabled="submitting" v-cloak>
+        {{ submitting ? 'Logging in...' : 'Login'}}
+      </button>
+
+      <!-- Google Sign-In Button -->
+      <div id="g_id_onload"
+           data-client_id="115531890549-d3tfh22ar4fl8o5c9uh1ffc2mkpfqa44.apps.googleusercontent.com"
+           data-context="signin"
+           data-ux_mode="popup"
+           data-callback="handleCredentialResponse"
+           data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin" data-type="standard"></div>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 MuseSphere. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function handleCredentialResponse(response) {
+      console.log("Encoded JWT ID token: " + response.credential);
+    }
+  </script>
+</body>
+</html>

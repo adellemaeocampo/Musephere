@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js" defer></script>
+  <script src="./script/script.js" defer></script>
+  <style>
+    /* Additional styling for Admin Dashboard */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    #navbar {
+      margin-top: 10px;
+    }
+
+    #navbar a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    #navbar a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .user-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .user-card {
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f5f5f5;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-card h3 {
+      margin: 0 0 10px;
+    }
+
+    .user-card button {
+      margin-right: 10px;
+    }
+
+    form {
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f5f5f5;
+    }
+
+    form input, form select, form button {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body id="adminApp" v-cloak>
+  <header>
+    <a href="Settings.html" id="profile-section" v-if="signedInUser" style="position: absolute; top: 10px; left: 10px;" class="auth-only">
+      <img :src="profilePic || defaultPic" alt="Profile Picture" width="50" height="50" style="border-radius: 50%;" />
+    </a>
+    <label class="switch">
+      <input type="checkbox" v-model="dark_mode">
+      <span class="slider round"></span>
+    </label>
+    <h1>MuseSphere Admin Dashboard</h1>
+    <p>Manage users and administrative tasks</p>
+    <nav id="navbar">
+      <a href="Home.html" class="guestandAuth">Home</a>
+      <a href="Explore.html" class="auth-only">Explore</a>
+      <a href="Profile.html" class="auth-only">Collection</a>
+      <a href="Settings.html" class="auth-only">Settings</a>
+      <a href="SignUp.html" class="guest-only">Sign Up</a>
+      <a href="login.html" class="guest-only">Login</a>
+      <a href="#" @click.prevent="logout" v-if="signedInUser" class="auth-only">Logout</a>
+    </nav>
+  </header>
+
+  <section>
+    <div class="manage-users">
+      <div>
+        <h2>Manage Users</h2>
+        <button @click="fetchUsers">List All Users</button>
+      </div>
+      <form @submit.prevent="addUser">
+        <h3>Add New User</h3>
+        <input v-model="newUser.username" placeholder="Username" required>
+        <input v-model="newUser.email" placeholder="Email" required>
+        <input v-model="newUser.password" type="password" placeholder="Password" required>
+        <select v-model="newUser.role">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button type="submit">Add User</button>
+      </form>
+    </div>
+
+    <div class="user-list">
+      <div class="user-card" v-for="user in users" :key="user.id">
+        <h3>{{ user.username }}</h3>
+        <p>Role: {{ user.role }}</p>
+        <button @click="deleteUser(user.id)">Delete</button>
+        <button @click="editUser(user)">Edit</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 MuseSphere. All rights reserved.</p>
+  </footer>
+
+  <script>
+    if (!sessionStorage.getItem('role') || sessionStorage.getItem('role') !== 'admin') {
+      window.location.href = '/login.html'; // Redirect non-admins to login
+    }
+  </script>
+</body>
+</html>

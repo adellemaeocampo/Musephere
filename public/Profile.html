@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js" defer></script>
+  <script src="./script/script.js" defer></script>
+</head>
+
+<body id="app" v-cloak>
+  <header>
+    <a href="Settings.html" id="profile-section" v-if="signedInUser" style="position: absolute; top: 10px; left: 10px;" class="auth-only">
+      <img :src="profilePic || defaultPic" alt="Profile Picture" width="50" height="50" style="border-radius: 50%;" />
+    </a>
+    <label class="switch">
+      <input type="checkbox" v-model="dark_mode">
+      <span class="slider round"></span>
+    </label>
+    <h1>MuseSphere</h1>
+    <p>Your global community for art lovers</p>
+    <nav id="navbar">
+      <a href="Home.html" class="guestandAuth">Home</a>
+      <a href="Explore.html" class="auth-only">Explore</a>
+      <a href="Profile.html" class="auth-only">Collection</a>
+      <a href="Settings.html" class="auth-only">Settings</a>
+      <a href="SignUp.html" class="guest-only">Sign Up</a>
+      <a href="login.html" class="guest-only">Login</a>
+      <a href="AdminDashboard.html" class="auth-only" v-if="isAdmin">Admin Dashboard</a>
+      <a href="#" @click.prevent="logout" v-if="signedInUser" class="auth-only">Logout</a>
+    </nav>
+
+  </header>
+
+  <section id="profile">
+    <h2>Your Profile</h2>
+    <p>View your liked artworks here.</p>
+    <div class="liked-art-grid">
+      <div class="liked-art" v-for="art in likedArtworks" :key="art.id" @click="openModal(art)">
+        <img :src="art.image_url || noImg" :alt="art.title || 'Untitled'"/>
+        <h4>{{ art.title || 'Untitled' }}</h4>
+        <div>
+          <p><em>{{ art.artist || 'Unknown artist' }}</em></p>
+          <p>{{ art.date || 'Date Unknown' }}</p>
+        </div>
+        <button class="like-button" id="profileLikeBtn" @click.stop="toggleLike(art)">
+          <i class="fa fa-heart" :class="{ liked: likedArtworkIds.includes(art.id) }"></i>
+        </button>
+      </div>
+    </div>
+
+
+    <!--modal-->
+    <div class="modal" v-if="modalVisible" @click.self="modalVisible = false">
+      <div class="modal-content">
+        <span class="close" @click="modalVisible = false">&times;</span>
+        <img :src="modalArtwork?.primaryimageurl || noImg" alt="Artwork Image" />
+        <h2>{{ modalArtwork?.title || 'Untitled' }}</h2>
+        <p><strong>Artist:</strong> {{ modalArtwork?.people?.[0]?.name || 'Unknown Artist' }}</p>
+        <p><strong>Date:</strong> {{ modalArtwork?.dated || 'Unknown Date.' }}</p>
+        <p><strong>Medium:</strong> {{ modalArtwork?.medium || 'Unknown Medium.' }}</p>
+        <p><strong>Period:</strong> {{ modalArtwork?.period || 'Unknown Period.' }}</p>
+        <p><strong>Description:</strong> {{ modalArtwork?.description || 'No description available.' }}</p>
+
+        <button class="like-button" @click.stop="toggleLike(modalArtwork)">
+          <i class="fa fa-heart" :class="{ liked: likedArtworkIds.includes(modalArtwork.id) }"></i>
+        </button>
+      </div>
+    </div>
+
+  </section>
+  <footer>
+    <p>&copy; 2025 MuseSphere. All rights reserved.</p>
+  </footer>
+</body>
+</html>

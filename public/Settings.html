@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js" defer></script>
+  <script src="./script/script.js" defer></script>
+</head>
+
+<body id="app" v-cloak>
+  <header>
+    <div id="profile-section" v-if="signedInUser" style="position: absolute; top: 10px; left: 10px;" class="auth-only">
+        <img :src="profilePic" @error="profilePic = defaultPic" alt="Profile Picture"
+       width="40" height="40" style="border-radius: 50%;" />
+    </div>
+    <label class="switch">
+      <input type="checkbox" v-model="dark_mode">
+      <span class="slider round"></span>
+    </label>
+    <h1>MuseSphere</h1>
+    <p>Your global community for art lovers</p>
+    <nav id="navbar">
+      <a href="Home.html" class="guestandAuth">Home</a>
+      <a href="Explore.html" class="auth-only">Explore</a>
+      <a href="Profile.html" class="auth-only">Collection</a>
+      <a href="Settings.html" class="auth-only">Settings</a>
+      <a href="SignUp.html" class="guest-only">Sign Up</a>
+      <a href="login.html" class="guest-only">Login</a>
+      <a href="AdminDashboard.html" class="auth-only" v-if="isAdmin">Admin Dashboard</a>
+      <a href="#" @click.prevent="logout" v-if="signedInUser" class="auth-only">Logout</a>
+    </nav>
+
+  </header>
+
+  <section id="settings">
+    <h2>Account Settings</h2>
+    <h3>Change Avatar</h3>
+    <div id="profile-pic-area">
+      <img :src="profilePic" @error="profilePic = defaultPic" alt="Profile Picture"
+      class="profile-pic" width="100" height="100" style="border-radius: 50%;" />
+
+      <input type="file" @change="uploadPic" />
+    </div>
+    <br>
+    <h3>Change Username or Password</h3>
+    <form @submit.prevent="updateSettings">
+      <label for="username">Change Username:</label>
+      <input type="text" id="username" v-model="newUsername" placeholder="New Username" />
+
+      <label for="password">Change Password:</label>
+      <input type="password" id="password" v-model="newPassword" placeholder="New Password" />
+
+      <button type="submit">Update Settings</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 MuseSphere. All rights reserved.</p>
+  </footer>
+</body>
+</html>
